@@ -1,8 +1,9 @@
 language: java
 jdk: oraclejdk8
- 
+
 script:
-- ./mvnw clean install -B
+  - mvn test
+  - mvn clean package
 
 sudo: required
  
