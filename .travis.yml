@@ -1,6 +1,8 @@
 language: java
 jdk: oraclejdk8
 
+env:
+  - COMMIT=${TRAVIS_COMMIT::7}
 script:
   - mvn test
   - mvn clean package
