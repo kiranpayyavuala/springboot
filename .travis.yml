@@ -5,20 +5,7 @@ env:
   - COMMIT=${TRAVIS_COMMIT::7}
 script:
   - mvn test
-  - mvn clean package
-
-sudo: required
- 
-services:
-  - docker
-
-after_success:
-- docker login -u kiranpayyavuala -p kiranPAY1
-- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
-- export IMAGE_NAME=kiranpayyavuala/myapp
-- docker build -t $IMAGE_NAME:$COMMIT .
-- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
-- docker push $IMAGE_NAME
+  - mvn clean install package
 
 before_script:
 - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -27,3 +14,16 @@ before_script:
 - curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
 - chmod +x kops-linux-amd64
 - sudo mv kops-linux-amd64 /usr/local/bin/kops
+
+sudo: required
+ 
+services:
+  - docker
+
+after_success:
+- docker login -u <ourdocker hub username> -p <ourpassword>
+- export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH; fi`
+- export IMAGE_NAME=kiranpayyavuala/myapp
+- docker build -t $IMAGE_NAME:$COMMIT .
+- docker tag $IMAGE_NAME:$COMMIT $IMAGE_NAME:$TAG
+- docker push $IMAGE_NAME
